@@ -9,7 +9,14 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import datetime
 import numpy as np
+<<<<<<< HEAD
 from scipy import ndimage
+=======
+import base64
+import cStringIO
+import skimage
+import skimage.io as io
+>>>>>>> fb3037566c00ed3c69124dc365c92f3600bd44d9
 
 class SALICON (COCO):
     def __init__(self, annotation_file=None):
@@ -171,8 +178,31 @@ class SALICON (COCO):
         res.createIndex()
         return res
 
+    @staticmethod
+    def encodeImage(imageFile):
+        """
+        Encode image file into string using base64.
+        :param   imageFile : str - (path of png or jpg file)  
+        :return: string     : encoded image as string
+        """
+        encoded_string = ''
+        if not os.path.exist(imageFile):
+            print "File does not exist",imageFile
+        with open(imgFile, "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read())
+        return encoded_string
 
-
+    @staticmethod
+    def decodeImage(imageStr):
+        """
+        Decode image string back into image data
+        :param imageStr: image as encoded base64 string
+        :return img : image as ndarray
+        """
+        salmapData = base64.b64decode(imageStr)
+        salmapFilelike = cStringIO.StringIO(salmapData)
+        img = skimage.img_as_float(io.imread(salmapFilelike))
+        return img
 
 if __name__ == "__main__":
     s = SALICON('../annotations/fixations_val2014_examples.json')
