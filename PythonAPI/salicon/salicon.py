@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import datetime
 import numpy as np
+from scipy import ndimage
 
 class SALICON (COCO):
     def __init__(self, annotation_file=None):
@@ -18,7 +19,7 @@ class SALICON (COCO):
         :return:
         """
         COCO.__init__(self,annotation_file=annotation_file)
-       
+
 
     def createIndex(self):
         """
@@ -26,7 +27,7 @@ class SALICON (COCO):
         """
         return COCO.createIndex(self)
 
-    def info(self): 
+    def info(self):
         """
         Didn't change the original method, just call super
         """
@@ -55,7 +56,7 @@ class SALICON (COCO):
             anns = self.dataset['annotations']
         else:
             anns = sum([self.imgToAnns[imgId] for imgId in imgIds if imgId in self.imgToAnns],[])
-        
+
         if self.dataset['type'] == 'fixations' or self.dataset['type'] == 'saliency_map':
             ids = [ann['id'] for ann in anns]
         else:
@@ -96,7 +97,7 @@ class SALICON (COCO):
         assert(len(set([ann['image_id'] for ann in anns])) == 1)
         image_id = list(set([ann['image_id'] for ann in anns]))[0]
         imginfo = self.imgs[image_id]
-        #if datatype is fixations, build saliency map 
+        #if datatype is fixations, build saliency map
         sal_map = np.zeros((imginfo['height'],imginfo['width']))
         if self.dataset['type'] == 'fixations':
             #TODO# depend on self.buildSaliencyMap
@@ -106,9 +107,9 @@ class SALICON (COCO):
             sal_map = anns[0]['saliency_map']
         # TODO # show saliency map now
         # to change to heatmap
-        plt.imshow(sal_map, cmap = cm.Greys_r,vmin=0,vmax=1)        
+        plt.imshow(sal_map, cmap = cm.Greys_r,vmin=0,vmax=1)
 
-    def buildFixMap(self,anns,doBlur=True):
+    def buildFixMap(self,anns,doBlur=True,sigma=19):
         """
         TODO: Build Saliency Map based on fixation annotations
         refer to format spec to see the format of fixations
@@ -120,24 +121,21 @@ class SALICON (COCO):
         #check whether all annotations are for the same image
         assert(len(set([ann['image_id'] for ann in anns])) == 1)
         image_id = list(set([ann['image_id'] for ann in anns]))[0]
-        
-        # TODO # fspecial implementation in python 
-        # gauss = fspecial('gaussian', round([pDB.display.ppd pDB.display.ppd] * 5), pDB.display.ppd);
+
         fixations = [ann['fixations'] for ann in anns] # fixations from several workers
         merged_fixations = [item for sublist in fixations for item in sublist] #merge
         #create saliency map
         imginfo = self.imgs[image_id]
         sal_map = np.zeros((imginfo['height'],imginfo['width']))
-        
+
         for x,y in merged_fixations:
             sal_map[y][x] = 1
         if doBlur:
-            # TODO # imfileter and normalise in python
-            #sal_map = imfilter(sal_map, gauss, 0);
-            #sal_map = normalise(sal_map);
-            pass
+            sal_map = ndimage.filters.gaussian_filter(sal_map, sigma)
+            sal_map -= np.min(sal_map)
+            sal_map /= np.max(sal_map)
         return sal_map
-    
+
     def loadRes(self, resFile):
         """
         Load result file and return a result api object.
@@ -166,7 +164,7 @@ class SALICON (COCO):
                 ann['id'] = id
             ### TODO ###
             # make sure whether needs to copy other things into Result object
-            
+
         print 'DONE (t=%0.2fs)'%((datetime.datetime.utcnow() - time_t).total_seconds())
 
         res.dataset['annotations'] = anns
