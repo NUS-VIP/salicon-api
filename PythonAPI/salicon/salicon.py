@@ -9,14 +9,11 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import datetime
 import numpy as np
-<<<<<<< HEAD
 from scipy import ndimage
-=======
 import base64
 import cStringIO
 import skimage
 import skimage.io as io
->>>>>>> fb3037566c00ed3c69124dc365c92f3600bd44d9
 
 class SALICON (COCO):
     def __init__(self, annotation_file=None):
@@ -182,7 +179,7 @@ class SALICON (COCO):
     def encodeImage(imageFile):
         """
         Encode image file into string using base64.
-        :param   imageFile : str - (path of png or jpg file)  
+        :param   imageFile : str - (path of png or jpg file)
         :return: string     : encoded image as string
         """
         encoded_string = ''
