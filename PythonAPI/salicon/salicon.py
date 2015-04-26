@@ -108,7 +108,7 @@ class SALICON (COCO):
             sal_map = self.buildFixMap(anns)
         elif self.dataset['type'] == 'saliency_map':
             assert(len(anns) == 1)
-            sal_map = anns[0]['saliency_map']
+            sal_map = self.decodeImage(anns[0]['saliency_map'])
         # TODO # show saliency map now
         # to change to heatmap
         plt.imshow(sal_map, cmap = cm.Greys_r,vmin=0,vmax=1)
@@ -132,8 +132,8 @@ class SALICON (COCO):
         imginfo = self.imgs[image_id]
         sal_map = np.zeros((imginfo['height'],imginfo['width']))
 
-        for x,y in merged_fixations:
-            sal_map[y][x] = 1
+        for y,x in merged_fixations:
+            sal_map[y-1][x-1] = 1
         if doBlur:
             sal_map = ndimage.filters.gaussian_filter(sal_map, sigma)
             sal_map -= np.min(sal_map)
