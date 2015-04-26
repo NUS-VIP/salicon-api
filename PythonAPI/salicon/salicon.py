@@ -115,7 +115,7 @@ class SALICON (COCO):
 
     def buildFixMap(self,anns,doBlur=True,sigma=19):
         """
-        TODO: Build Saliency Map based on fixation annotations
+        TODO: Build a fixation map based on fixation annotations
         refer to format spec to see the format of fixations
         """
         if len(anns) == 0:
