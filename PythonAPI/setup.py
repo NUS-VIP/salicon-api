@@ -76,7 +76,7 @@ def build_fixmaps(in_ann_wo_fixmap, out_ann_w_fixmap):
     """
     build a full self-contained annoation json file with fixations maps inside.
     :param in_ann_wo_fixmap: the original annotation without fixation maps
-    :param out_ann_w_fixmap: the path to the output annotation with fixation maps 
+    :param out_ann_w_fixmap: the path to the output annotation with fixation maps
     """
     #TODO
     pass
@@ -105,23 +105,22 @@ if query_yes_no("Do you want to download zipped validation images [0.8GB] under 
    url = 'https://dl.dropboxusercontent.com/u/3777195/salicon/2015_r1/stimuli/val.zip'
    download(url, '../images/val2015r1.zip')
 
-if query_yes_no("Do you want to download zipped validation images [0.8GB] under ./images?", default='no'):
+if query_yes_no("Do you want to download zipped test images [0.8GB] under ./images?", default='no'):
    url = 'https://dl.dropboxusercontent.com/u/3777195/salicon/2015_r1/stimuli/test.zip'
    download(url, '../images/test2015r1.zip')
 
 # download annotations
-#for split in ['train', 'val']:
-for split in ['train']:
+for split in ['train', 'val']:
    for anno in ['fixations']:
        # download annotations
        if   split == 'train'    and anno == 'fixations':
-           size = '524'
+           size = '818'
        elif split == 'val'      and anno == 'fixations':
-           size = '178'
+           size = '459'
 
        if query_yes_no("Do you want to download %s split for %s annotations [%sMB] under ./annotations?"%(split, anno, size), default='yes'):
            fname = '../annotations/%s_%s2015r1.json'%(anno, split)
-           url = 'https://dl.dropboxusercontent.com/u/3777195/salicon/2015_r1/annotation/%s_%s2015r1.json'%(anno, split)
+           url = 'https://dl.dropboxusercontent.com/u/3777195/salicon/2015_r1/mouse/%s_%s2014.json'%(anno, split)
            download(url, fname)
 
        if query_yes_no("The downloaded annotation files has only fixations but no fixation maps. Do you want to build annotation file with fixations maps under ./annotations?", default='yes'):
