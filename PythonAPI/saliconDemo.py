@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[21]:
+# In[1]:
 
 #get_ipython().magic(u'reload_ext autoreload')
 #get_ipython().magic(u'autoreload 2')
@@ -12,36 +12,36 @@ import skimage.io as io
 import matplotlib.pyplot as plt
 
 
-# In[12]:
+# In[2]:
 
-dataDir='.'
-dataType='val2014'
-annFile='%s/annotations/fixations_%s_examples.json'%(dataDir,dataType)
+dataDir='..'
+dataType='train2014examples'
+annFile='%s/annotations/fixations_%s.json'%(dataDir,dataType)
 
 
-# In[13]:
+# In[3]:
 
 # initialize COCO api for instance annotations
 salicon=SALICON(annFile)
 
 
-# In[16]:
+# In[4]:
 
 # get all images 
 imgIds = salicon.getImgIds();
 img = salicon.loadImgs(imgIds[np.random.randint(0,len(imgIds))])[0]
 
 
-# In[18]:
+# In[6]:
 
 # load and display image
-I = io.imread('%s/images/examples/%s'%(dataDir,img['file_name']))
+I = io.imread('%s/images/%s/%s'%(dataDir,dataType,img['file_name']))
 plt.figure()
 plt.imshow(I)
 plt.show()
 
 
-# In[30]:
+# In[7]:
 
 # load and display instance annotations
 #plt.imshow(I)
