@@ -97,16 +97,16 @@ print "The following steps help you download images and annotations."
 print "Given the size of zipped image files, manual download is recommended at http://mscoco.org/download"
 # download train images
 if query_yes_no("Do you want to download zipped training images [1.5GB] under ./images?", default='no'):
-   url = 'https://dl.dropboxusercontent.com/u/3777195/salicon/2015_r1/stimuli/train.zip'
+   url = 'https://s3.amazonaws.com/salicon-dataset/2015r1/train.zip'
    download(url, '../images/train2015r1.zip')
 
 # download val images
 if query_yes_no("Do you want to download zipped validation images [0.8GB] under ./images?", default='no'):
-   url = 'https://dl.dropboxusercontent.com/u/3777195/salicon/2015_r1/stimuli/val.zip'
+   url = 'https://s3.amazonaws.com/salicon-dataset/2015r1/val.zip'
    download(url, '../images/val2015r1.zip')
 
 if query_yes_no("Do you want to download zipped test images [0.8GB] under ./images?", default='no'):
-   url = 'https://dl.dropboxusercontent.com/u/3777195/salicon/2015_r1/stimuli/test.zip'
+   url = 'https://s3.amazonaws.com/salicon-dataset/2015r1/test.zip'
    download(url, '../images/test2015r1.zip')
 
 # download annotations
@@ -114,18 +114,18 @@ for split in ['train', 'val']:
    for anno in ['fixations']:
        # download annotations
        if   split == 'train'    and anno == 'fixations':
-           size = '818'
+            size = '818'
        elif split == 'val'      and anno == 'fixations':
-           size = '459'
+            size = '459'
 
        if query_yes_no("Do you want to download %s split for %s annotations [%sMB] under ./annotations?"%(split, anno, size), default='yes'):
-           fname = '../annotations/%s_%s2015r1.json'%(anno, split)
-           url = 'https://dl.dropboxusercontent.com/u/3777195/salicon/2015_r1/mouse/%s_%s2014.json'%(anno, split)
-           download(url, fname)
+            fname = '../annotations/%s_%s2015r1.json'%(anno, split)
+            url = 'https://s3.amazonaws.com/salicon-dataset/2015r1/%s_%s2014.json'%(anno,split)
+            download(url, fname)
 
        if query_yes_no("The downloaded annotation files has only fixations but no fixation maps. Do you want to build annotation file with fixations maps under ./annotations?", default='yes'):
-           input_fname = '../annotations/%s_%s2015r1.json' %(anno,split)
-           output_fname = './annotations/%s_%s2015r1.json' %('fixationmaps',split)
-           build_fixmaps(input_fname,output_fname)
+            input_fname = '../annotations/%s_%s2015r1.json' %(anno,split)
+            output_fname = './annotations/%s_%s2015r1.json' %('fixationmaps',split)
+            build_fixmaps(input_fname,output_fname)
 
 
