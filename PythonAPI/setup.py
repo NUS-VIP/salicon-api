@@ -97,26 +97,36 @@ print "The following steps help you download images and annotations."
 print "Given the size of zipped image files, manual download is recommended at http://mscoco.org/download"
 # download train images
 if query_yes_no("Do you want to download zipped training images [1.5GB] under ./images?", default='no'):
-   url = 'https://dl.dropboxusercontent.com/u/3777195/salicon-dataset/2015r1/train.zip'
+   url = 'https://www.dropbox.com/s/cy96zvud8fdpwde/train.zip?dl=1'
    download(url, '../images/train2015r1.zip')
 
 # download val images
 if query_yes_no("Do you want to download zipped validation images [0.8GB] under ./images?", default='no'):
-   url = 'https://dl.dropboxusercontent.com/u/3777195/salicon-dataset/2015r1/val.zip'
+   url = 'https://www.dropbox.com/s/9jzzwsaxnwnbdmg/val.zip?dl=1'
    download(url, '../images/val2015r1.zip')
 
 if query_yes_no("Do you want to download zipped test images [0.8GB] under ./images?", default='no'):
-   url = 'https://dl.dropboxusercontent.com/u/3777195/salicon-dataset/2015r1/test.zip'
+   url = 'https://www.dropbox.com/s/4gzn0hs1tw4ydlu/test.zip?dl=1'
    download(url, '../images/test2015r1.zip')
 
 # download annotations
 for split in ['train', 'val']:
-   for anno in ['fixations']:
-       # download annotations
-       if   split == 'train'    and anno == 'fixations':
+    for anno in ['fixations']:
+        # download annotations
+        if   split == 'train'    and anno == 'fixations':
             size = '818'
-       elif split == 'val'      and anno == 'fixations':
+            if query_yes_no("Do you want to download %s split for %s annotations [%sMB] under ./annotations?"%(split, anno, size), default='yes'):
+                fname = '../annotations/%s_%s2015r1.json'%(anno, split)
+                url = 'https://www.dropbox.com/s/7t2sc4m92hhtzm2/fixations_train2014.json.zip?dl=1'
+                download(url, fname)
+
+        elif split == 'val'      and anno == 'fixations':
             size = '459'
+            if query_yes_no("Do you want to download %s split for %s annotations [%sMB] under ./annotations?"%(split, anno, size), default='yes'):
+                fname = '../annotations/%s_%s2015r1.json'%(anno, split)
+                url = 'https://www.dropbox.com/s/bgo91bnoqk3m5ja/fixations_val2014.json.zip?dl=1'
+                download(url, fname)
+
 
        if query_yes_no("Do you want to download %s split for %s annotations [%sMB] under ./annotations?"%(split, anno, size), default='yes'):
             fname = '../annotations/%s_%s2015r1.json'%(anno, split)
